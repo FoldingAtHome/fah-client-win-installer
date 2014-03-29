@@ -1,25 +1,22 @@
-# Configure system boilerplate
-import os, sys
-sys.path.append(os.environ.get('CONFIG_SCRIPTS_HOME',
-                               '../../control/config-scripts'))
-import config
+# Setup
+import os
+env = Environment()
+try:
+    env.Tool('config', toolpath = [os.environ.get('CBANG_HOME')])
+except Exception, e:
+    raise Exception, 'CBANG_HOME not set?\n' + str(e)
+env.CBLoadTools('packager')
+conf = env.CBConfigure()
 
 # Version
 version = open('version/version.txt', 'r').read().strip()
 major, minor, revision = version.split('.')
 
-# Setup
-env = config.make_env(['packager'])
-
-# Configure
-conf = Configure(env)
-
-# Packaging
-config.configure('packager', conf)
-conf.Finish()
+# Config vars
+env.Replace(PACKAGE_VERSION = version)
 
 # Check and set home variables
-for var in 'CLIENT CONTROL VIEWER SCREENSAVER'.split():
+for var in 'FAH_CLIENT FAH_CONTROL FAH_VIEWER FAH_SCREENSAVER'.split():
     if not var + '_HOME' in os.environ: raise Exception, var + '_HOME not set'
     env[var + '_HOME'] = os.environ.get(var + '_HOME')
 
