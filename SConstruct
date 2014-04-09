@@ -5,15 +5,11 @@ try:
     env.Tool('config', toolpath = [os.environ.get('CBANG_HOME')])
 except Exception, e:
     raise Exception, 'CBANG_HOME not set?\n' + str(e)
-env.CBLoadTools('packager')
+env.CBLoadTools('packager fah-client-version')
 conf = env.CBConfigure()
 
 # Version
-version = open('version/version.txt', 'r').read().strip()
-major, minor, revision = version.split('.')
-
-# Config vars
-env.Replace(PACKAGE_VERSION = version)
+version = env.FAHClientVersion()
 
 # Check and set home variables
 for var in 'FAH_CLIENT FAH_CONTROL FAH_VIEWER FAH_SCREENSAVER'.split():

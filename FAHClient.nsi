@@ -5,21 +5,21 @@
 
 !define WEB_CLIENT_URL          "http://folding.stanford.edu/client/"
 
-!define CLIENT_HOME             "%(CLIENT_HOME)s"
+!define CLIENT_HOME             "%(FAH_CLIENT_HOME)s"
 !define CLIENT_NAME             "FAHClient"
 !define CLIENT_EXE              "FAHClient.exe"
 !define CLIENT_ICON             "FAHClient.ico"
 
-!define CONTROL_HOME            "%(CONTROL_HOME)s"
+!define CONTROL_HOME            "%(FAH_CONTROL_HOME)s"
 !define CONTROL_EXE             "FAHControl.exe"
 !define CONTROL_NAME            "FAHControl"
 
-!define VIEWER_HOME             "%(VIEWER_HOME)s"
+!define VIEWER_HOME             "%(FAH_VIEWER_HOME)s"
 !define VIEWER_NAME             "FAHViewer"
 !define VIEWER_EXE              "FAHViewer.exe"
 !define VIEWER_ICON             "FAHViewer.ico"
 
-!define SCREENSAVER_HOME        "%(SCREENSAVER_HOME)s"
+!define SCREENSAVER_HOME        "%(FAH_SCREENSAVER_HOME)s"
 !define SCREENSAVER_EXE         "FAHScreensaver.scr"
 
 !define UNINSTALLER             "Uninstall.exe"
