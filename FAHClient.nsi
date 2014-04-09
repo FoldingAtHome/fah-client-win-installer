@@ -174,9 +174,9 @@ Section -Install
   File "${VIEWER_HOME}\${VIEWER_EXE}"
   File "${CLIENT_HOME}\images\${CLIENT_ICON}"
   File "${VIEWER_HOME}\images\${VIEWER_ICON}"
-  File /oname=README.txt "${CLIENT_HOME}\README"
+  File "${CLIENT_HOME}\README.md"
   File /oname=License.txt "${CLIENT_HOME}\copyright"
-  File /oname=ChangeLog.txt "${CLIENT_HOME}\ChangeLog"
+  File "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
   File "${CLIENT_HOME}\win32\*.dll"
   IfErrors 0 +2
