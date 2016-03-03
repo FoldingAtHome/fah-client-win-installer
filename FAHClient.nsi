@@ -37,8 +37,7 @@
 !define PRODUCT_DIR_REGKEY \
   "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}"
 
-!define UNINSTALL_URL \
-    "http://www.stanford.edu/group/pandegroup/cgi-bin/uninstall.php"
+!define UNINSTALL_URL "http://foding.stanford.edu/uninstall.php"
 
 !define MULTIUSER_EXECUTIONLEVEL Highest
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER
@@ -84,7 +83,6 @@ Var UninstallDetails
 !include LogicLib.nsh
 !include EnvVarUpdate.nsh
 !include WinVer.nsh
-!include OpenURL.nsh
 
 ; Config
 Name "${DISPLAY_NAME} ${PRODUCT_VERSION}"
@@ -399,7 +397,7 @@ Section -un.Program
     DetailPrint "Reporting uninstall reason: $UninstallReason"
     StrCpy $0 "${UNINSTALL_URL}?reason=$UninstallReason"
     StrCpy $0 "$0&version=${PRODUCT_VERSION}"
-    ${If} $UninstallDetials != ""
+    ${If} $UninstallDetails != ""
       StrCpy $0 "$0&details=$UninstallDetails"
     ${EndIf}
     inetc::get /SILENT $0 $TEMP\fahreason.htm
