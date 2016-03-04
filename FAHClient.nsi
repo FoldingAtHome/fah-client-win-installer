@@ -87,7 +87,7 @@ Var UninstallDetails
 ; Config
 Name "${DISPLAY_NAME} ${PRODUCT_VERSION}"
 OutFile "${PRODUCT_TARGET}"
-InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
+InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
