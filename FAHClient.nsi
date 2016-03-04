@@ -177,7 +177,7 @@ Section -Install
   File "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
   File "${CLIENT_HOME}\win32\*.dll"
-  IfFileExists "deps" 0 +1
+  IfFileExists "deps" 0 +2
     File /r "deps\*.*"
   IfErrors 0 +2
     MessageBox MB_RETRYCANCEL "Failed to install files.  Most likely some \
