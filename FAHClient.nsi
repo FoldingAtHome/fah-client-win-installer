@@ -87,7 +87,7 @@ Var UninstallDetails
 ; Config
 Name "${DISPLAY_NAME} ${PRODUCT_VERSION}"
 OutFile "${PRODUCT_TARGET}"
-InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}"
+InstallDir "$PROGRAMFILES%(PACKAGE_ARCH)s\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
@@ -177,8 +177,8 @@ Section -Install
   File "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
   File "${CLIENT_HOME}\win32\*.dll"
-  IfFileExists "deps" 0 +2
-    File /r "deps\*.*"
+  IfFileExists "%(WINDOWS_INSTALLER_DEPS)s" 0 +2
+    File /r "%(WINDOWS_INSTALLER_DEPS)s\*.*"
   IfErrors 0 +2
     MessageBox MB_RETRYCANCEL "Failed to install files.  Most likely some \
         software, possibly Folding@home is currently using one or more files \
@@ -197,7 +197,7 @@ Section -Install
   SetOutPath "$INSTDIR\lib\gtk-2.0\2.10.0\engines"
   File /r "${CONTROL_HOME}\theme-engines\gtk-2.0\2.10.0\engines\*.dll"
 
-  ; Install Screensaver in system dir
+  ; Install screensaver in system dir
   SetOutPath "$SYSDIR"
   ${If} ${AtMostWinXP}
     File /oname=FAH.scr "${SCREENSAVER_HOME}\${SCREENSAVER_EXE}"
