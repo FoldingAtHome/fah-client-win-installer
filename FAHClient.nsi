@@ -177,8 +177,7 @@ Section -Install
   File "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
   File "${CLIENT_HOME}\win32\*.dll"
-  IfFileExists "%(WINDOWS_INSTALLER_DEPS)s" 0 +2
-    File /r "%(WINDOWS_INSTALLER_DEPS)s\*.*"
+  File /r "%(WINDOWS_INSTALLER_DEPS)s\*.*"
   IfErrors 0 +2
     MessageBox MB_RETRYCANCEL "Failed to install files.  Most likely some \
         software, possibly Folding@home is currently using one or more files \
