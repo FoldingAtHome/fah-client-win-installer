@@ -180,7 +180,7 @@ Section -Install
   File "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
   File "${CLIENT_HOME}\win32\*.dll"
-  %(INSTALL_FILES)s
+  %(NSIS_INSTALL_FILES)s
 
   IfErrors 0 +2
     MessageBox MB_RETRYCANCEL "Failed to install files.  Most likely some \
