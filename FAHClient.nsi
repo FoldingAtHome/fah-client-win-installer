@@ -141,6 +141,9 @@ RequestExecutionLevel admin
 Section -Install
   !insertmacro MULTIUSER_INIT  
 
+  ; 32/64 bit registry
+  SetRegView %(PACKAGE_ARCH)s
+
   ; Shutdown running client
   DetailPrint "Shutting down any local clients.  (Please wait)"
   nsExec::Exec '"$INSTDIR\${CLIENT_EXE}" --send-command=shutdown'
@@ -177,7 +180,7 @@ Section -Install
   File "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
   File "${CLIENT_HOME}\win32\*.dll"
-  %(NSIS_INSTALL_FILES)s
+  %(INSTALL_FILES)s
 
   IfErrors 0 +2
     MessageBox MB_RETRYCANCEL "Failed to install files.  Most likely some \
