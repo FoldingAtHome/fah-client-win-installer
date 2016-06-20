@@ -25,8 +25,15 @@ else: code_sign_key_pass = None
 if 'SIGNTOOL' in os.environ: env['SIGNTOOL'] = os.environ['SIGNTOOL']
 
 # Installer deps
-env['WINDOWS_INSTALLER_DEPS'] = \
-    os.environ.get('WINDOWS_INSTALLER_DEPS', '/nonexistent')
+deps = '''
+  ${FAH_CLIENT_HOME}/FAHClient.exe
+  ${FAH_CLIENT_HOME}/FAHCoreWrapper.exe
+  ${FAH_CLIENT_HOME}/HideConsole.exe
+  ${FAH_VIEWER_HOME}/FAHViewer.exe
+  ${FAH_SCREENSAVER_HOME}/FAHScreensaver.scr
+  ${FAH_CONTROL_HOME}/gui/*.pyd
+  ${FAH_CONTROL_HOME}/gui/*.exe
+'''.split()
 
 # Package
 pkg = env.Packager(
@@ -35,6 +42,7 @@ pkg = env.Packager(
     url = 'http://folding.stanford.edu/',
     summary = 'Folding@home Client',
     nsi = 'FAHClient.nsi',
+    nsi_dll_deps = deps,
     timestamp_url = 'http://timestamp.comodoca.com/authenticode',
     code_sign_key = os.environ.get('CODE_SIGN_KEY', None),
     code_sign_key_pass = code_sign_key_pass,
@@ -42,4 +50,3 @@ pkg = env.Packager(
 
 AlwaysBuild(pkg)
 env.Alias('package', pkg)
-
