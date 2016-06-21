@@ -142,7 +142,7 @@ Section -Install
   !insertmacro MULTIUSER_INIT  
 
   ; 32/64 bit registry
-  ; SetRegView %(PACKAGE_ARCH)s
+  SetRegView %(PACKAGE_ARCH)s
 
   ; Shutdown running client
   DetailPrint "Shutting down any local clients.  (Please wait)"
