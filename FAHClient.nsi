@@ -37,7 +37,7 @@
 !define PRODUCT_DIR_REGKEY \
   "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}"
 
-!define UNINSTALL_URL "http://foding.stanford.edu/uninstall.php"
+!define UNINSTALL_URL "http://folding.stanford.edu/uninstall.php"
 
 !define MULTIUSER_EXECUTIONLEVEL Highest
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER
@@ -175,9 +175,9 @@ Section -Install
   File "${VIEWER_HOME}\${VIEWER_EXE}"
   File "${CLIENT_HOME}\images\${CLIENT_ICON}"
   File "${VIEWER_HOME}\images\${VIEWER_ICON}"
-  File "${CLIENT_HOME}\README.md"
+  File /oname=README.txt "${CLIENT_HOME}\README.md"
   File /oname=License.txt "${CLIENT_HOME}\copyright"
-  File "${CLIENT_HOME}\CHANGELOG.md"
+  File /oname=ChangeLog.txt "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
   File "${CLIENT_HOME}\win32\*.dll"
   %(NSIS_INSTALL_FILES)s

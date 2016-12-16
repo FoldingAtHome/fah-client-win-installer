@@ -14,7 +14,9 @@ version = env.FAHClientVersion()
 # Check and set home variables
 for var in 'FAH_CLIENT FAH_CONTROL FAH_VIEWER FAH_SCREENSAVER'.split():
     if not var + '_HOME' in os.environ: raise Exception, var + '_HOME not set'
-    env[var + '_HOME'] = os.environ.get(var + '_HOME')
+    home = os.environ.get(var + '_HOME')
+    if env['PLATFORM'] == 'win32': home = home.replace('/', '\\')
+    env[var + '_HOME'] = home
 
 # Code sign key password
 path = os.environ.get('CODE_SIGN_KEY_PASS_FILE')
