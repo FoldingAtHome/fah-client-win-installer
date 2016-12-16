@@ -267,17 +267,17 @@ write_uninstaller:
 
   ; Save uninstall information
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-    "DisplayName" "${PRODUCT_NAME}" 
+    "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-    "UninstallString" "$INSTDIR\${UNINSTALLER}" 
+    "UninstallString" "$INSTDIR\${UNINSTALLER}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-    "DisplayIcon" "$INSTDIR\${PRODUCT_NAME}.ico" 
+    "DisplayIcon" "$INSTDIR\${PRODUCT_NAME}.ico"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-    "URLInfoAbout" "${PRODUCT_WEBSITE}" 
+    "URLInfoAbout" "${PRODUCT_WEBSITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-    "Publisher" "${PRODUCT_VENDOR}" 
+    "Publisher" "${PRODUCT_VENDOR}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-    "DisplayVersion" "${PRODUCT_VERSION}" 
+    "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\${CONTROL_EXE}"
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "Path" "$INSTDIR"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
@@ -375,7 +375,7 @@ Section -un.Program
   ${Else}
     StrCpy $1 "HKCU"
   ${EndIf}
-  ${un.EnvVarUpdate} $0 "PATH" "R" $1 $INSTDIR  
+  ${un.EnvVarUpdate} $0 "PATH" "R" $1 $INSTDIR
 
   ; Registry
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"

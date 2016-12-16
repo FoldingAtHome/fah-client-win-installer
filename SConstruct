@@ -33,9 +33,13 @@ deps = '''
   ${FAH_CLIENT_HOME}/HideConsole.exe
   ${FAH_VIEWER_HOME}/FAHViewer.exe
   ${FAH_SCREENSAVER_HOME}/FAHScreensaver.scr
-  ${FAH_CONTROL_HOME}/gui/*.pyd
   ${FAH_CONTROL_HOME}/gui/*.exe
 '''.split()
+
+import fnmatch
+for root, dirnames, filenames in os.walk(env.get('FAH_CONTROL_HOME') + '/gui'):
+    for filename in fnmatch.filter(filenames, '*.pyd'):
+        deps.append(os.path.join(root, filename))
 
 # Package
 pkg = env.Packager(
