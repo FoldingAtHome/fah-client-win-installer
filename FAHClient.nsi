@@ -179,7 +179,6 @@ Section -Install
   File /oname=License.txt "${CLIENT_HOME}\copyright"
   File /oname=ChangeLog.txt "${CLIENT_HOME}\CHANGELOG.md"
   File /r "${CONTROL_HOME}\gui\*.*"
-  File "${CLIENT_HOME}\win32\*.dll"
   %(NSIS_INSTALL_FILES)s
 
   IfErrors 0 +2
