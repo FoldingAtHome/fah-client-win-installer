@@ -196,7 +196,7 @@ Section -Install
   File /r /x .svn "${CONTROL_HOME}\themes\*.*"
 
   ; Theme engines
-  SetOutPath "$INSTDIR\lib\gtk-2.0\2.10.0\engines"
+  SetOutPath "$INSTDIR"
   File /r "${CONTROL_HOME}\theme-engines\gtk-2.0\2.10.0\engines\*.dll"
 
   ; Install screensaver in system dir
