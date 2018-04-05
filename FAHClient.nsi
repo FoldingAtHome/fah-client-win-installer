@@ -3,7 +3,7 @@
 !define PROJECT_NAME            "Folding@home"
 !define DISPLAY_NAME            "Folding@home Client"
 
-!define WEB_CLIENT_URL          "http://folding.stanford.edu/client/"
+!define WEB_CLIENT_URL          "https://foldingathome.org/client/"
 
 !define CLIENT_HOME             "%(FAH_CLIENT_HOME)s"
 !define CLIENT_NAME             "FAHClient"
@@ -27,17 +27,17 @@
 
 !define PRODUCT_CONFIG          "config.xml"
 !define PRODUCT_LICENSE         "${CLIENT_HOME}\copyright"
-!define PRODUCT_VENDOR          "Stanford University"
+!define PRODUCT_VENDOR          "Folding@home.org"
 !define PRODUCT_TARGET          "%(package)s"
 !define PRODUCT_VERSION         "%(version)s"
-!define PRODUCT_WEBSITE         "http://folding.stanford.edu/"
+!define PRODUCT_WEBSITE         "https://foldingathome.org/"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_UNINST_KEY \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_DIR_REGKEY \
   "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}"
 
-!define UNINSTALL_URL "http://folding.stanford.edu/uninstall.php"
+!define UNINSTALL_URL "https://foldingathome.org/uninstall.php"
 
 !define MULTIUSER_EXECUTIONLEVEL Highest
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER

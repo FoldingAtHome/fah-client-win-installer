@@ -45,7 +45,7 @@ for root, dirnames, filenames in os.walk(env.get('FAH_CONTROL_HOME') + '/gui'):
 pkg = env.Packager(
     'fah-installer',
     version = version,
-    url = 'http://folding.stanford.edu/',
+    url = 'https://foldingathome.org/',
     summary = 'Folding@home Client',
     nsi = 'FAHClient.nsi',
     nsi_dll_deps = deps,
