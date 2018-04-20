@@ -3,7 +3,7 @@
 !define PROJECT_NAME            "Folding@home"
 !define DISPLAY_NAME            "Folding@home Client"
 
-!define WEB_CLIENT_URL          "https://foldingathome.org/client/"
+!define WEB_CLIENT_URL          "https://client.foldingathome.org/"
 
 !define CLIENT_HOME             "%(FAH_CLIENT_HOME)s"
 !define CLIENT_NAME             "FAHClient"
@@ -37,7 +37,7 @@
 !define PRODUCT_DIR_REGKEY \
   "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_NAME}"
 
-!define UNINSTALL_URL "https://foldingathome.org/uninstall.php"
+!define UNINSTALL_URL "https://apps.foldingathome.org/uninstall.php"
 
 !define MULTIUSER_EXECUTIONLEVEL Highest
 !define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER
