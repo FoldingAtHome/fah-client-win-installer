@@ -152,6 +152,15 @@ Section -Install
   Delete "$SMSTARTUP\${CLIENT_NAME}.lnk"
   Delete "$SMSTARTUP\${CONTROL_NAME}.lnk"
 
+  ; Uninstall old software
+  ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
+  "UninstallString"
+  StrCmp $R0 "" install_files
+
+  DetailPrint "Uninstalling old software"
+  ClearErrors
+  nsExec::Exec '$R0 /S'
+
   ; Install files
   install_files:
   ClearErrors
@@ -399,15 +408,6 @@ Function .onInit
     MessageBox MB_OK "XP and above required"
     Quit
   ${EndIf}
-
-  ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-  "UninstallString"
-  StrCmp $R0 "" done
-
-  ClearErrors
-  nsExec::Exec '$R0 /S'
-
-  done:
 FunctionEnd
 
 
