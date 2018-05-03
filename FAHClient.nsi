@@ -153,13 +153,33 @@ Section -Install
   Delete "$SMSTARTUP\${CONTROL_NAME}.lnk"
 
   ; Uninstall old software
-  ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-  "UninstallString"
-  StrCmp $R0 "" install_files
+  ; Avoid simply removing the whole directory as that causes subsequent file
+  ; writes to fail for several seconds afterwards.
+  DetailPrint "Uninstalling any conflicting Folding@home software"
+  FindFirst $0 $1 $INSTDIR\*.*
+  clean_loop:
+    StrCmp $1 "" clean_done
 
-  DetailPrint "Uninstalling old software"
-  ClearErrors
-  nsExec::Exec '$R0 /S'
+    ; Skip . and ..
+    StrCmp $1 "." clean_next
+    StrCmp $1 ".." clean_next
+
+    ; Remove subdirectories
+    IfFileExists $INSTDIR\$1\*.* 0 +3
+    RmDir /r $INSTDIR\$1
+    Goto clean_next
+
+    ; Remove file
+    Delete $INSTDIR\$1
+
+    ; Next
+    clean_next:
+    FindNext $0 $1
+    Goto clean_loop
+
+  ; Done
+  clean_done:
+  FindClose $0
 
   ; Install files
   install_files:
