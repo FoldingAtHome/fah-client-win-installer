@@ -94,8 +94,6 @@ Var DataDir
 !insertmacro MUI_PAGE_LICENSE "${PRODUCT_LICENSE}"
 Page custom InstallLevel
 
-!define MUI_PAGE_CUSTOMFUNCTION_PRE InstallModePre
-
 !define MUI_PAGE_CUSTOMFUNCTION_PRE DirectoryPre1
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE DirectoryLeave1
 !insertmacro MUI_PAGE_DIRECTORY
@@ -401,7 +399,7 @@ Function .onInit
     Quit
   ${EndIf}
 
-  ReadRegStr $R0 HKLM ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
+  ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
   "UninstallString"
   StrCmp $R0 "" done
 
@@ -496,13 +494,6 @@ Function OnCustomInstallChange
   ${NSD_GetState} $CustomInstallWidget $CustomInstall
   ${If} $CustomInstall == ${BST_CHECKED}
     StrCpy $ExpressInstall ${BST_UNCHECKED}
-  ${EndIf}
-FunctionEnd
-
-
-Function InstallModePre
-  ${If} $ExpressInstall == ${BST_CHECKED}
-    Abort
   ${EndIf}
 FunctionEnd
 
