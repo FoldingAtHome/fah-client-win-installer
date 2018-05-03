@@ -39,11 +39,6 @@
 
 !define UNINSTALL_URL "https://apps.foldingathome.org/uninstall.php"
 
-!define MULTIUSER_EXECUTIONLEVEL Highest
-!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER
-!define MULTIUSER_INSTALLMODE_COMMANDLINE
-!define MULTIUSER_MUI ; Must be before includes
-
 !define MUI_ABORTWARNING
 !define MUI_ICON "${CLIENT_HOME}\images\${CLIENT_ICON}"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
@@ -77,7 +72,6 @@ Var UninstallReason
 Var UninstallDetails
 
 ; Includes
-!include MultiUser.nsh
 !include MUI2.nsh
 !include nsDialogs.nsh
 !include LogicLib.nsh
@@ -101,7 +95,6 @@ Var DataDir
 Page custom InstallLevel
 
 !define MUI_PAGE_CUSTOMFUNCTION_PRE InstallModePre
-!insertmacro MULTIUSER_PAGE_INSTALLMODE
 
 !define MUI_PAGE_CUSTOMFUNCTION_PRE DirectoryPre1
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE DirectoryLeave1
@@ -139,8 +132,6 @@ RequestExecutionLevel admin
 
 ; Sections
 Section -Install
-  !insertmacro MULTIUSER_INIT  
-
   ; 32/64 bit registry
   SetRegView %(PACKAGE_ARCH)s
 
@@ -211,14 +202,8 @@ Section -Install
   File "${CLIENT_HOME}\sample-config.xml"
 
   ; Add to PATH
-  ${If} $MultiUser.InstallMode == "AllUsers"
-    StrCpy $1 "HKLM"
-    SetShellVarContext all
-  ${Else}
-    StrCpy $1 "HKCU"
-    SetShellVarContext current
-  ${EndIf}
-  ${EnvVarUpdate} $0 "PATH" "A" $1 $INSTDIR
+  SetShellVarContext current
+  ${EnvVarUpdate} $0 "PATH" "A" "HKCU" $INSTDIR
 
   ; DataDir
   CreateDirectory $DataDir
@@ -369,12 +354,7 @@ Section -un.Program
   ${EndIf}
 
   ; Remove from PATH
-  ${If} $MultiUser.InstallMode == "AllUsers"
-    StrCpy $1 "HKLM"
-  ${Else}
-    StrCpy $1 "HKCU"
-  ${EndIf}
-  ${un.EnvVarUpdate} $0 "PATH" "R" $1 $INSTDIR
+  ${un.EnvVarUpdate} $0 "PATH" "R" "HKCU" $INSTDIR
 
   ; Registry
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
@@ -416,12 +396,19 @@ SectionEnd
 
 ; Functions
 Function .onInit
-  !insertmacro MULTIUSER_INIT
-
   ${IfNot} ${AtLeastWinXP}
     MessageBox MB_OK "XP and above required"
     Quit
   ${EndIf}
+
+  ReadRegStr $R0 HKLM ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
+  "UninstallString"
+  StrCmp $R0 "" done
+
+  ClearErrors
+  nsExec::Exec '$R0 /S'
+
+  done:
 FunctionEnd
 
 
@@ -680,8 +667,6 @@ Function StartFAH
 FunctionEnd
 
 Function un.onInit
-  !insertmacro MULTIUSER_UNINIT
-
   ; Get Data Directory
   ReadRegStr $DataDir ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
     "DataDirectory"
