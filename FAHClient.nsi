@@ -217,30 +217,6 @@ Section -Install
   Delete "$DESKTOP\FAHControl.lnk"
   Delete "$DESKTOP\Start Folding@home.lnk"
 
-  ; Start Menu
-  RMDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Folding@home.lnk" \
-    "$INSTDIR\HideConsole.exe" '"$INSTDIR\${CLIENT_EXE}" --open-web-control' \
-    "$INSTDIR\${CLIENT_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Web Control.lnk" \
-    "$INSTDIR\FAHWebClient.url" "" "$INSTDIR\${CLIENT_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${CONTROL_NAME}.lnk" \
-    "$INSTDIR\${CONTROL_EXE}" "" "$INSTDIR\${CLIENT_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${VIEWER_NAME}.lnk" \
-    "$INSTDIR\${VIEWER_EXE}" "" "$INSTDIR\${VIEWER_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Data Directory.lnk" "$DataDir"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\About ${PROJECT_NAME}.lnk" \
-    "$INSTDIR\About ${PROJECT_NAME}.url"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" \
-    "$INSTDIR\${UNINSTALLER}"
-
-  ; Internet shortcuts
-  WriteIniStr "$INSTDIR\FAHWebClient.url" "InternetShortcut" "URL" \
-    "${WEB_CLIENT_URL}"
-  WriteIniStr "$INSTDIR\About ${PROJECT_NAME}.url" "InternetShortcut" "URL" \
-    "${PRODUCT_WEBSITE}"
-
   ; Write uninstaller
 write_uninstaller:
   ClearErrors
@@ -266,6 +242,30 @@ write_uninstaller:
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "Path" "$INSTDIR"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
     "DataDirectory" $DataDir
+
+  ; Start Menu
+  RMDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
+  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Folding@home.lnk" \
+    "$INSTDIR\HideConsole.exe" '"$INSTDIR\${CLIENT_EXE}" --open-web-control' \
+    "$INSTDIR\${CLIENT_ICON}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Web Control.lnk" \
+    "$INSTDIR\FAHWebClient.url" "" "$INSTDIR\${CLIENT_ICON}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${CONTROL_NAME}.lnk" \
+    "$INSTDIR\${CONTROL_EXE}" "" "$INSTDIR\${CLIENT_ICON}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${VIEWER_NAME}.lnk" \
+    "$INSTDIR\${VIEWER_EXE}" "" "$INSTDIR\${VIEWER_ICON}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Data Directory.lnk" "$DataDir"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\About ${PROJECT_NAME}.lnk" \
+    "$INSTDIR\About ${PROJECT_NAME}.url"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" \
+    "$INSTDIR\${UNINSTALLER}"
+
+  ; Internet shortcuts
+  WriteIniStr "$INSTDIR\FAHWebClient.url" "InternetShortcut" "URL" \
+    "${WEB_CLIENT_URL}"
+  WriteIniStr "$INSTDIR\About ${PROJECT_NAME}.url" "InternetShortcut" "URL" \
+    "${PRODUCT_WEBSITE}"
 
   ;  Autostart
   Delete "$SMSTARTUP\${CLIENT_NAME}.lnk" # Clean up old link
