@@ -370,7 +370,8 @@ Section -un.Program
   remove_dir:
   ClearErrors
   RMDir /r "$INSTDIR"
-  IfErrors 0 +2
+  IfErrors 0 +3
+    IfSilent +2
     MessageBox MB_RETRYCANCEL "Failed to remove $INSTDIR.  Please stop all \
       running Folding@home software." IDRETRY remove_dir
 
