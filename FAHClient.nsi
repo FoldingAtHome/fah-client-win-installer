@@ -70,6 +70,7 @@ Var StartupMode
 Var EnableScreensaver
 Var UninstallReason
 Var UninstallDetails
+Var UNINSTDIR
 
 ; Includes
 !include MUI2.nsh
@@ -133,20 +134,29 @@ Section -Install
   ; 32/64 bit registry
   SetRegView %(PACKAGE_ARCH)s
 
+  ReadRegStr $UNINSTDIR ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" \
+      "Path"
+
   ; Shutdown running client
   DetailPrint "Shutting down any local clients.  (Please wait)"
-  nsExec::Exec '"$INSTDIR\${CLIENT_EXE}" --send-command=shutdown'
+  nsExec::Exec '"$UNINSTDIR\${CLIENT_EXE}" --send-command=shutdown'
 
   ; Shutdown running control
   DetailPrint "Shutting down any running FAHControl.  (Please wait)"
-  nsExec::Exec '"$INSTDIR\${CONTROL_EXE}" --exit'
+  nsExec::Exec '"$UNINSTDIR\${CONTROL_EXE}" --exit'
 
   ; Remove service
-  IfFileExists "$INSTDIR\${CLIENT_EXE}" 0 +4
+  IfFileExists "$UNINSTDIR\${CLIENT_EXE}" 0 +4
     DetailPrint "Removing service, if previously installed. (This can take \
         awhile)"
-    nsExec::Exec '"$INSTDIR\${CLIENT_EXE}" --stop-service'
-    nsExec::Exec '"$INSTDIR\${CLIENT_EXE}" --uninstall-service'
+    nsExec::Exec '"$UNINSTDIR\${CLIENT_EXE}" --stop-service'
+    nsExec::Exec '"$UNINSTDIR\${CLIENT_EXE}" --uninstall-service'
+
+  ; Terminate
+  FindProcDLL::KillProc "$UNINSTDIR\${CLIENT_EXE}"
+  FindProcDLL::WaitProcEnd "$UNINSTDIR\${CLIENT_EXE}"
+  FindProcDLL::KillProc "$UNINSTDIR\${CONTROL_EXE}"
+  FindProcDLL::WaitProcEnd "$UNINSTDIR\${CONTROL_EXE}"
 
   ; Remove Autostart
   Delete "$SMSTARTUP\${CLIENT_NAME}.lnk"
@@ -156,30 +166,8 @@ Section -Install
   ; Avoid simply removing the whole directory as that causes subsequent file
   ; writes to fail for several seconds afterwards.
   DetailPrint "Uninstalling any conflicting Folding@home software"
-  FindFirst $0 $1 $INSTDIR\*.*
-  clean_loop:
-    StrCmp $1 "" clean_done
-
-    ; Skip . and ..
-    StrCmp $1 "." clean_next
-    StrCmp $1 ".." clean_next
-
-    ; Remove subdirectories
-    IfFileExists $INSTDIR\$1\*.* 0 +3
-    RmDir /r $INSTDIR\$1
-    Goto clean_next
-
-    ; Remove file
-    Delete $INSTDIR\$1
-
-    ; Next
-    clean_next:
-    FindNext $0 $1
-    Goto clean_loop
-
-  ; Done
-  clean_done:
-  FindClose $0
+  Push $INSTDIR
+  Call EmptyDir
 
   ; Install files
   install_files:
@@ -265,8 +253,10 @@ write_uninstaller:
     "Publisher" "${PRODUCT_VENDOR}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
     "DisplayVersion" "${PRODUCT_VERSION}"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\${CONTROL_EXE}"
-  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "Path" "$INSTDIR"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" "" \
+    "$INSTDIR\${CONTROL_EXE}"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" "Path" \
+    "$INSTDIR"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
     "DataDirectory" $DataDir
 
@@ -428,6 +418,54 @@ Function .onInit
     MessageBox MB_OK "XP and above required"
     Quit
   ${EndIf}
+FunctionEnd
+
+
+Function TerminateApp
+  Pop $0
+
+  FindWindow $1 '' $0
+  IntCmp $1 0 terminate_app_done
+
+  System::Call 'user32.dll::GetWindowThreadProcessId(i r0, *i .r1) i .r2'
+  System::Call 'kernel32.dll::OpenProcess(i 0x00100001, i 0, i r1) i .r2'
+  SendMessage $1 16 0 0 /TIMEOUT=5000
+  System::Call 'kernel32.dll::WaitForSingleObject(i r2, i 5000) i .r1'
+  IntCmp $1 0 terminate_app_close
+  System::Call 'kernel32.dll::TerminateProcess(i r2, i 0) i .r1'
+  terminate_app_close:
+  System::Call 'kernel32.dll::CloseHandle(i r2) i .r1'
+  terminate_app_done:
+FunctionEnd
+
+
+Function EmptyDir
+  Pop $0
+
+  FindFirst $1 $2 $0\*.*
+  empty_dir_loop:
+    StrCmp $2 "" empty_dir_done
+
+    ; Skip . and ..
+    StrCmp $2 "." empty_dir_next
+    StrCmp $2 ".." empty_dir_next
+
+    ; Remove subdirectories
+    IfFileExists $0\$2\*.* 0 +3
+    RmDir /r $0\$2
+    Goto empty_dir_next
+
+    ; Remove file
+    Delete $INSTDIR\$2
+
+    ; Next
+    empty_dir_next:
+    FindNext $1 $2
+    Goto empty_dir_loop
+
+  ; Done
+  empty_dir_done:
+  FindClose $1
 FunctionEnd
 
 
