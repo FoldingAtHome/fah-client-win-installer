@@ -68,8 +68,6 @@
 ; Variables
 Var StartupMode
 Var EnableScreensaver
-Var UninstallReason
-Var UninstallDetails
 Var UNINSTDIR
 
 ; Includes
@@ -84,8 +82,6 @@ Name "${DISPLAY_NAME} ${PRODUCT_VERSION}"
 OutFile "${PRODUCT_TARGET}"
 InstallDir "$PROGRAMFILES%(PACKAGE_ARCH)s\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
-ShowInstDetails show
-ShowUnInstDetails show
 
 
 ; Pages
@@ -121,7 +117,6 @@ Page custom InstallDialog
   "You may choose to save your configuration and work unit data for later \
    use or completely uninstall."
 !insertmacro MUI_UNPAGE_COMPONENTS
-UninstPage custom un.UninstallQuestion
 !insertmacro MUI_UNPAGE_INSTFILES
 
 !insertmacro MUI_LANGUAGE "English"
@@ -393,17 +388,6 @@ Section -un.Program
     IfSilent +2
     MessageBox MB_RETRYCANCEL "Failed to remove $INSTDIR.  Please stop all \
       running Folding@home software." IDRETRY remove_dir
-
-  ; Send uninstall reason
-  ${If} $UninstallReason != ""
-    DetailPrint "Reporting uninstall reason: $UninstallReason"
-    StrCpy $0 "${UNINSTALL_URL}?reason=$UninstallReason"
-    StrCpy $0 "$0&version=${PRODUCT_VERSION}"
-    ${If} $UninstallDetails != ""
-      StrCpy $0 "$0&details=$UninstallDetails"
-    ${EndIf}
-    inetc::get /SILENT $0 $TEMP\fahreason.htm
-  ${EndIf}
 SectionEnd
 
 
@@ -720,70 +704,4 @@ Function un.onInit
   ; Get Data Directory
   ReadRegStr $DataDir ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
     "DataDirectory"
-FunctionEnd
-
-
-Function un.UninstallQuestion
-  !insertmacro MUI_HEADER_TEXT "${PRODUCT_NAME}" "Uninstall Reason"
-
-  StrCpy $UninstallReason ""
-
-  nsDialogs::Create 1018
-  Pop $0
-  ${If} $0 == error
-    Abort
-  ${EndIf}
-
-  ${NSD_CreateLabel} 10u 40u 300u 24u \
-    "Please help us improve our software by telling us why you have choosen \
-      to uninstall Folding@home?"
-  Pop $0
-
-  ${NSD_CreateDropList} 10u 70u 200u 12u ""
-  Pop $0
-
-  StrCpy $1 "Upgrading or unspecified" # Default
-
-  ${NSD_CB_AddString} $0 $1 # Default
-  ${NSD_CB_AddString} $0 "Software confusing or too difficult"
-  ${NSD_CB_AddString} $0 "Frustrating user experience"
-  ${NSD_CB_AddString} $0 "Not satisfied with scientific results"
-  ${NSD_CB_AddString} $0 "Not sure what I'm contributing"
-  ${NSD_CB_AddString} $0 "Could not find help"
-  ${NSD_CB_AddString} $0 "Not what I expected"
-  ${NSD_CB_AddString} $0 "Project descriptions were confusing"
-  ${NSD_CB_AddString} $0 "Computer seems slower"
-  ${NSD_CB_AddString} $0 "Excessive fan noise"
-  ${NSD_CB_AddString} $0 "Computer heat problems"
-  ${NSD_CB_AddString} $0 "Experienced software bugs"
-  ${NSD_CB_AddString} $0 "Prefer v6 client"
-  ${NSD_CB_AddString} $0 "Laptop battery drain"
-  ${NSD_CB_AddString} $0 "Other"
-
-  ${NSD_CB_SelectString} $0 $1 # Set default
-  ${NSD_OnChange} $0 un.OnUninstallReasonChange
-
-  ${NSD_CreateLabel} 10u 90u 300u 12u \
-    "You may also provide a brief explanation in your own words.  \
-      Max 256 characters."
-  Pop $0
-
-  ${NSD_CreateText} 10u 110u 300u 12u ""
-  Pop $0
-  ${NSD_SetTextLimit} $0 256
-  ${NSD_OnChange} $0 un.OnUninstallDetailsChange
-
-  nsDialogs::Show
-FunctionEnd
-
-
-Function un.OnUninstallReasonChange
-  Pop $0
-  ${NSD_GetText} $0 $UninstallReason
-FunctionEnd
-
-
-Function un.OnUninstallDetailsChange
-  Pop $0
-  ${NSD_GetText} $0 $UninstallDetails
 FunctionEnd
