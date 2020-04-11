@@ -554,9 +554,28 @@ Function DirectoryLeave1
 FunctionEnd
 
 
+!MACRO EnsureEndsWith VALUE END
+  Push $R0
+  Push $R1
+  Push $R2
+
+  StrLen $R0 ${END}
+  IntOp $R1 0 - $R0
+  StrCpy $R2 ${VALUE} $R0 $R1
+  StrCmp $R2 ${END} +2
+  StrCpy ${VALUE} "${VALUE}${END}"
+
+  Pop $R2
+  Pop $R1
+  Pop $R0
+!MACROEND
+
+
 Function DirectoryLeave2
   Push $DataDir
   Call ValidPath
+
+  ${EnsureEndsWith} $DataDir "\${PRODUCT_NAME}"
 
   StrLen $0 $INSTDIR
   StrCpy $1 $DataDir $0
