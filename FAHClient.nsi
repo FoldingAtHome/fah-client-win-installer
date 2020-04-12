@@ -257,7 +257,7 @@ write_uninstaller:
 
   ; Save uninstall information
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
-    "DisplayName" "${PRODUCT_NAME}"
+    "DisplayName" "${DISPLAY_NAME}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
     "UninstallString" "$INSTDIR\${UNINSTALLER}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
@@ -522,7 +522,7 @@ Function InstallLevel
     StrCpy $InstallModeInitialized "True"
   ${EndIf}
 
-  !insertmacro MUI_HEADER_TEXT "${PRODUCT_NAME}" "Installer Mode"
+  !insertmacro MUI_HEADER_TEXT "${DISPLAY_NAME}" "Installer Mode"
 
   nsDialogs::Create 1018
   Pop $0
@@ -619,7 +619,7 @@ Function InstallDialog
     Abort
   ${EndIf}
 
-  !insertmacro MUI_HEADER_TEXT "${PRODUCT_NAME}" "Installation"
+  !insertmacro MUI_HEADER_TEXT "${DISPLAY_NAME}" "Installation"
 
   nsDialogs::Create 1018
   Pop $0
@@ -708,7 +708,7 @@ FunctionEnd
 Function StartFAH
   ${If} $StartupMode == ${STARTUP_AT_LOGIN}
     # Also opens Web Control
-    ExecShell "open" "$SMPROGRAMS\${PRODUCT_NAME}\Folding@home.lnk"
+    ExecShell "open" "$SMPROGRAMS\${DISPLAY_NAME}\Folding@home.lnk"
 
   ${ElseIf} $StartupMode == ${STARTUP_AS_SERVICE}
     start_service:
@@ -717,7 +717,7 @@ Function StartFAH
     IfErrors 0 +2
     MessageBox MB_RETRYCANCEL "Failed to start service" IDRETRY start_service
 
-    ExecShell "open" "$SMPROGRAMS\${PRODUCT_NAME}\Web Control.lnk"
+    ExecShell "open" "$SMPROGRAMS\${DISPLAY_NAME}\Web Control.lnk"
   ${EndIf}
 FunctionEnd
 
