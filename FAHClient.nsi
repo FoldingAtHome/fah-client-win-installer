@@ -1,7 +1,7 @@
 ; Defines
 !define PRODUCT_NAME            "FAHClient"
 !define PROJECT_NAME            "Folding@home"
-!define DISPLAY_NAME            "Folding@home Client"
+!define DISPLAY_NAME            "Folding@home"
 
 !define WEB_CLIENT_URL          "https://client.foldingathome.org/"
 
@@ -257,20 +257,21 @@ write_uninstaller:
 
   ; Start Menu
   RMDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Folding@home.lnk" \
+  RMDir /r "$SMPROGRAMS\${DISPLAY_NAME}"
+  CreateDirectory "$SMPROGRAMS\${DISPLAY_NAME}"
+  CreateShortCut "$SMPROGRAMS\${DISPLAY_NAME}\Folding@home.lnk" \
     "$INSTDIR\HideConsole.exe" '"$INSTDIR\${CLIENT_EXE}" --open-web-control' \
     "$INSTDIR\${CLIENT_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Web Control.lnk" \
+  CreateShortCut "$SMPROGRAMS\${DISPLAY_NAME}\Web Control.lnk" \
     "$INSTDIR\FAHWebClient.url" "" "$INSTDIR\${CLIENT_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${CONTROL_NAME}.lnk" \
+  CreateShortCut "$SMPROGRAMS\${DISPLAY_NAME}\${CONTROL_NAME}.lnk" \
     "$INSTDIR\${CONTROL_EXE}" "" "$INSTDIR\${CLIENT_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${VIEWER_NAME}.lnk" \
+  CreateShortCut "$SMPROGRAMS\${DISPLAY_NAME}\${VIEWER_NAME}.lnk" \
     "$INSTDIR\${VIEWER_EXE}" "" "$INSTDIR\${VIEWER_ICON}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Data Directory.lnk" "$DataDir"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\About ${PROJECT_NAME}.lnk" \
+  CreateShortCut "$SMPROGRAMS\${DISPLAY_NAME}\Data Directory.lnk" "$DataDir"
+  CreateShortCut "$SMPROGRAMS\${DISPLAY_NAME}\About ${PROJECT_NAME}.lnk" \
     "$INSTDIR\About ${PROJECT_NAME}.url"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" \
+  CreateShortCut "$SMPROGRAMS\${DISPLAY_NAME}\Uninstall.lnk" \
     "$INSTDIR\${UNINSTALLER}"
 
   ; Internet shortcuts
@@ -337,7 +338,7 @@ Section -un.Program
   nsExec::Exec '"$INSTDIR\${CONTROL_EXE}" --exit'
 
   ; Menu
-  RMDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
+  RMDir /r "$SMPROGRAMS\${DISPLAY_NAME}"
 
   ; Autostart
   Delete "$SMSTARTUP\${CLIENT_NAME}.lnk"
