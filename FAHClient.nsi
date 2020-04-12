@@ -181,6 +181,18 @@ Section -Install
   Push $INSTDIR
   Call EmptyDir
 
+  ; Make sure Windows data directory ends with: \FAHClient (If missing, append it)
+  !insertmacro EnsureEndsWith $DataDir "\${PRODUCT_NAME}"
+
+  ; Set the working directory to not be the folder to delete
+  SetOutPath "$DataDir\themes"
+  ; Remove older unsupported Themes, if they exist
+  DetailPrint "Uninstalling any conflicting Folding@home themes"
+  RMDir /r "$DataDir\themes\Aero-Ion"
+  RMDir /r "$DataDir\themes\Evil-Mac"
+  RMDir /r "$DataDir\themes\Outcrop"
+  RMDir /r "$DataDir\themes\Win7-Basic"
+
   ; Install files
   install_files:
   ClearErrors
@@ -207,9 +219,6 @@ Section -Install
         from the Folding@home installation.  Note, complete shutdown can take \
         a little while after the application has closed." \
         IDRETRY install_files IDCANCEL abort
-
-  ; DataDir
-  !insertmacro EnsureEndsWith $DataDir "\${PRODUCT_NAME}"
 
   ; Themes
   SetOverwrite on
