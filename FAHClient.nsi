@@ -124,6 +124,23 @@ Page custom InstallDialog
 RequestExecutionLevel admin
 
 
+!macro EnsureEndsWith VALUE END
+  Push $R0
+  Push $R1
+  Push $R2
+
+  StrLen $R0 ${END}
+  IntOp $R1 0 - $R0
+  StrCpy $R2 ${VALUE} $R0 $R1
+  StrCmp $R2 ${END} +2
+  StrCpy ${VALUE} "${VALUE}${END}"
+
+  Pop $R2
+  Pop $R1
+  Pop $R0
+!macroend
+
+
 ; Sections
 Section -Install
   ; 32/64 bit registry
@@ -190,6 +207,9 @@ Section -Install
         from the Folding@home installation.  Note, complete shutdown can take \
         a little while after the application has closed." \
         IDRETRY install_files IDCANCEL abort
+
+  ; DataDir
+  !insertmacro EnsureEndsWith $DataDir "\${PRODUCT_NAME}"
 
   ; Themes
   SetOverwrite on
@@ -555,28 +575,9 @@ Function DirectoryLeave1
 FunctionEnd
 
 
-!macro EnsureEndsWith VALUE END
-  Push $R0
-  Push $R1
-  Push $R2
-
-  StrLen $R0 ${END}
-  IntOp $R1 0 - $R0
-  StrCpy $R2 ${VALUE} $R0 $R1
-  StrCmp $R2 ${END} +2
-  StrCpy ${VALUE} "${VALUE}${END}"
-
-  Pop $R2
-  Pop $R1
-  Pop $R0
-!macroend
-
-
 Function DirectoryLeave2
   Push $DataDir
   Call ValidPath
-
-  !insertmacro EnsureEndsWith $DataDir "\${PRODUCT_NAME}"
 
   StrLen $0 $INSTDIR
   StrCpy $1 $DataDir $0
