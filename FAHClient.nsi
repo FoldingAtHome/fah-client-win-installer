@@ -164,6 +164,13 @@ Section -Install
   Push $INSTDIR
   Call EmptyDir
 
+  ; Remove older unsupported Themes, if they exist
+  DetailPrint "Uninstalling any conflicting Folding@home themes"
+  RMDir /r "$DataDir\themes\Aero-Ion"
+  RMDir /r "$DataDir\themes\Evil-Mac"
+  RMDir /r "$DataDir\themes\Outcrop"
+  RMDir /r "$DataDir\themes\Win7-Basic"
+
   ; Install files
   install_files:
   ClearErrors
