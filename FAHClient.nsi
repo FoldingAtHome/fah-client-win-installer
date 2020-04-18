@@ -401,7 +401,7 @@ SectionEnd
 
 Section /o un.Data
   MessageBox MB_OKCANCEL \
-    "Are you sure you want to delete everything in ${DataDir}?" \
+    "Are you sure you want to delete everything in $DataDir?" \
     IDCANCEL skip_rmdir
 
   RMDir /r $DataDir
