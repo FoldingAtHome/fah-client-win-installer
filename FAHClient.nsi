@@ -219,7 +219,7 @@ Section -Install
   File "${CLIENT_HOME}\sample-config.xml"
 
   ; Add to PATH
-  SetShellVarContext current
+  SetShellVarContext all
   ${EnvVarUpdate} $0 "PATH" "A" "HKCU" $INSTDIR
 
   ; DataDir
