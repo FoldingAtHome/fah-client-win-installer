@@ -591,6 +591,7 @@ Function DirectoryPre2
   ${EndIf}
 
   ${If} $DataDir == ""
+    SetShellVarContext All
     StrCpy $DataDir "$APPDATA\${PRODUCT_NAME}"
   ${EndIf}
 
