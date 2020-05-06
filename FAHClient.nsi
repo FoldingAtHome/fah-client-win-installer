@@ -219,8 +219,7 @@ Section -Install
   File "${CLIENT_HOME}\sample-config.xml"
 
   ; Add to PATH
-  SetShellVarContext current
-  ${EnvVarUpdate} $0 "PATH" "A" "HKCU" $INSTDIR
+  ${EnvVarUpdate} $0 "PATH" "A" "HKLM" $INSTDIR
 
   ; DataDir
   CreateDirectory $DataDir
@@ -316,9 +315,9 @@ write_uninstaller:
       WriteINIStr "$WINDIR\system.ini" "boot" "SCRNSAVE.EXE" "$SYSDIR\FAH.scr"
 
     ${Else}
-      WriteRegStr HKCU "Control Panel\desktop" "SCRNSAVE.EXE" \
+      WriteRegStr HKLM "Control Panel\desktop" "SCRNSAVE.EXE" \
           "$SYSDIR\${SCREENSAVER_EXE}"
-      WriteRegStr HKCU "Control Panel\desktop" "ScreenSaveActive" "1"
+      WriteRegStr HKLM "Control Panel\desktop" "ScreenSaveActive" "1"
     ${EndIf}
 
     ; Notify system of the change
@@ -335,7 +334,7 @@ abort:
 SectionEnd
 
 
-Section -un.Program
+Section -un.Program 
   ; Shutdown running client
   DetailPrint "Shutting down any local clients"
   nsExec::Exec '"$INSTDIR\${CLIENT_EXE}" --send-command=shutdown'
@@ -346,7 +345,7 @@ Section -un.Program
 
   ; Menu
   RMDir /r "$SMPROGRAMS\${DISPLAY_NAME}"
-
+  
   ; Autostart
   Delete "$SMSTARTUP\${CLIENT_NAME}.lnk"
   Delete "$SMSTARTUP\${CONTROL_NAME}.lnk"
@@ -374,7 +373,7 @@ Section -un.Program
   ${EndIf}
 
   ; Remove from PATH
-  ${un.EnvVarUpdate} $0 "PATH" "R" "HKCU" $INSTDIR
+  ${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" $INSTDIR
 
   ; Registry
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
@@ -415,6 +414,8 @@ Function .onInit
     MessageBox MB_OK "XP and above required"
     Quit
   ${EndIf}
+  SetShellVarContext all
+  SetRegView %(PACKAGE_ARCH)s
 FunctionEnd
 
 
@@ -714,6 +715,8 @@ Function StartFAH
 FunctionEnd
 
 Function un.onInit
+  SetRegView %(PACKAGE_ARCH)s
+  SetShellVarContext all
   ; Get Data Directory
   ReadRegStr $DataDir ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" \
     "DataDirectory"
