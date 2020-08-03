@@ -334,7 +334,7 @@ abort:
 SectionEnd
 
 
-Section -un.Program 
+Section -un.Program
   ; Shutdown running client
   DetailPrint "Shutting down any local clients"
   nsExec::Exec '"$INSTDIR\${CLIENT_EXE}" --send-command=shutdown'
@@ -345,7 +345,7 @@ Section -un.Program
 
   ; Menu
   RMDir /r "$SMPROGRAMS\${DISPLAY_NAME}"
-  
+
   ; Autostart
   Delete "$SMSTARTUP\${CLIENT_NAME}.lnk"
   Delete "$SMSTARTUP\${CONTROL_NAME}.lnk"
