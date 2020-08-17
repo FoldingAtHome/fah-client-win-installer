@@ -230,8 +230,13 @@ Section -Install
   ; Desktop
   CreateShortCut "$DESKTOP\Folding@home.lnk" "$INSTDIR\HideConsole.exe" \
       '"$INSTDIR\${CLIENT_EXE}" --open-web-control' "$INSTDIR\${CLIENT_ICON}"
+
+  ; Delete old shortcuts
+  SetShellVarContext current
+  Delete "$DESKTOP\Folding@home.lnk"
   Delete "$DESKTOP\FAHControl.lnk"
   Delete "$DESKTOP\Start Folding@home.lnk"
+  SetShellVarContext all
 
   ; Write uninstaller
 write_uninstaller:
