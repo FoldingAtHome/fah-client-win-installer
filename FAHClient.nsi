@@ -291,8 +291,13 @@ write_uninstaller:
   WriteIniStr "$INSTDIR\About ${PROJECT_NAME}.url" "InternetShortcut" "URL" \
     "${PRODUCT_WEBSITE}"
 
+  ; Delete old auto start links
+  SetShellVarContext current
+  Delete "$SMSTARTUP\Folding@home.lnk"
+  SetShellVarContext all
+  Delete "$SMSTARTUP\${CLIENT_NAME}.lnk"
+
   ;  Autostart
-  Delete "$SMSTARTUP\${CLIENT_NAME}.lnk" # Clean up old link
   ${If} $StartupMode == ${STARTUP_AT_LOGIN}
     CreateShortCut "$SMSTARTUP\Folding@home.lnk" "$INSTDIR\HideConsole.exe" \
         "$INSTDIR\${CLIENT_EXE}" "$INSTDIR\${CLIENT_ICON}"
